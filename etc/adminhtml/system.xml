@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+    Copyright © 2026 Roman Pasichnyk
+    SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="zero_reward" translate="label" type="text" sortOrder="95" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Reward Points</label>
+            <tab>zero</tab>
+            <resource>Zero_RewardPoints::config</resource>
+            <group id="general" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1">
+                <label>Reward Points</label>
+                <comment>Signed-in customers earn points on paid orders, for signing up and for approved reviews, and pay part of an order with them at checkout (a discount). Points are kept per website. Balances and changes by hand: Customers > Reward Points.</comment>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="earn_rate" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Points per 1 Spent</label>
+                    <comment>Per 1 of the base currency paid for products (not shipping or tax), rounded down. 0: no points for orders.</comment>
+                    <validate>validate-zero-or-greater validate-number</validate>
+                </field>
+                <field id="point_value" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Value of 1 Point</label>
+                    <comment>In the base currency: 0.01 makes 100 points worth 1.</comment>
+                    <validate>validate-greater-than-zero validate-number</validate>
+                </field>
+                <field id="signup_points" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Points for Signing Up</label>
+                    <validate>validate-digits</validate>
+                </field>
+                <field id="review_points" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Points for a Review</label>
+                    <comment>When a signed-in customer's review is approved; once per product.</comment>
+                    <validate>validate-digits</validate>
+                </field>
+                <field id="min_points" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Fewest Points to Use</label>
+                    <validate>validate-digits</validate>
+                </field>
+                <field id="max_percent" translate="label comment" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Most of an Order Paid with Points, %</label>
+                    <comment>Of the products' price after other discounts.</comment>
+                    <validate>validate-digits validate-digits-range digits-range-1-100</validate>
+                </field>
+                <field id="expire_days" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Points Expire After, Days</label>
+                    <comment>Unspent points expire this long after they were earned. 0: never.</comment>
+                    <validate>validate-digits</validate>
+                </field>
+                <field id="show_on_product" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>"Earn N Points" on Product Pages</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

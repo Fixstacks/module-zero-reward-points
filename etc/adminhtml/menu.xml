@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!--
+    Copyright © 2026 Roman Pasichnyk
+    SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Zero_RewardPoints::points" title="Reward Points" translate="title" module="Zero_RewardPoints" sortOrder="40"
+             parent="Magento_Customer::customer" action="zero_reward/points/index" resource="Zero_RewardPoints::points"/>
+    </menu>
+</config>

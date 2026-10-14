@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+    Copyright © 2026 Roman Pasichnyk
+    SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+
+    "Earn N points" under the price.
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Framework\View\Element\Template" name="zero.reward.product" after="product.info.price"
+                   template="Zero_RewardPoints::product.phtml">
+                <arguments>
+                    <argument name="viewModel" xsi:type="object">Zero\RewardPoints\ViewModel\Product</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

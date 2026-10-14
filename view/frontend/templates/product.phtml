@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © 2026 Roman Pasichnyk
+ * SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+ *
+ * "Earn N points" under a product's price.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Zero\RewardPoints\ViewModel\Product $viewModel
+ */
+$earn = $block->getData('viewModel')->earn();
+if (!$earn) {
+    return;
+}
+?>
+<p class="zero-reward-earn text-sm text-base-content/70 mb-3" data-reward-earn="<?= (int) $earn['points'] ?>">
+    <?= $escaper->escapeHtml($earn['from']
+        ? __('Earn from %1 reward points', number_format($earn['points']))
+        : __('Earn %1 reward points', number_format($earn['points']))) ?>
+</p>

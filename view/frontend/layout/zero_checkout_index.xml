@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+    Copyright © 2026 Roman Pasichnyk
+    SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+
+    "Use your points" in the order summary, under the discount code.
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="zero.checkout.summary.totals.before">
+            <block class="Magento\Framework\View\Element\Template" name="zero.reward.checkout" after="zero.checkout.coupon"
+                   template="Zero_RewardPoints::checkout.phtml">
+                <arguments>
+                    <argument name="viewModel" xsi:type="object">Zero\RewardPoints\ViewModel\Checkout</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

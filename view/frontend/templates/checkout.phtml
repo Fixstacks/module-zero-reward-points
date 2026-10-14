@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright © 2026 Roman Pasichnyk
+ * SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+ *
+ * "Use your points" in the checkout's order summary (#checkout-reward), for a
+ * signed-in customer with points. Inside the checkout form, so its buttons
+ * are type="button" and hx-post to rewards/checkout/apply, which answers with
+ * this box and the totals.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Zero\RewardPoints\ViewModel\Checkout $viewModel
+ */
+$viewModel = $block->getData('viewModel');
+if (!$viewModel->isAvailable()) {
+    return;
+}
+$url = $block->getUrl('rewards/checkout/apply');
+$used = $viewModel->used();
+$usable = $used ? null : $viewModel->usable();
+?>
+<div id="checkout-reward" class="checkout-reward mb-4 text-sm">
+    <div class="flex items-center justify-between gap-3">
+        <?php if ($used): ?>
+            <span data-reward-used="<?= (int) $used ?>">
+                <?= $escaper->escapeHtml(__('%1 points used: %2 off', number_format($used), $viewModel->usedAmount())) ?>
+            </span>
+            <button type="button"
+                    hx-post="<?= $escaper->escapeUrl($url) ?>" hx-include="[name='form_key'], [name='payment_list_mode'], [name='payment_method']:checked" hx-vals='{"use": "0"}'
+                    hx-target="#checkout-reward" hx-swap="outerHTML"
+                    class="link link-neutral text-xs"><?= $escaper->escapeHtml(__('Remove')) ?></button>
+        <?php elseif ($usable['points'] > 0): ?>
+            <span>
+                <?= $escaper->escapeHtml(__('You have %1 points.', number_format($viewModel->balance()))) ?>
+            </span>
+            <button type="button"
+                    hx-post="<?= $escaper->escapeUrl($url) ?>" hx-include="[name='form_key'], [name='payment_list_mode'], [name='payment_method']:checked" hx-vals='{"use": "1"}'
+                    hx-target="#checkout-reward" hx-swap="outerHTML"
+                    class="btn btn-outline btn-sm"><?= $escaper->escapeHtml(__('Use %1 for %2 off', number_format($usable['points']), $usable['amount'])) ?></button>
+        <?php else: ?>
+            <span class="text-base-content/70">
+                <?= $escaper->escapeHtml(__('You have %1 points.', number_format($viewModel->balance()))) ?>
+            </span>
+        <?php endif; ?>
+    </div>
+    <?php if (!$used && $viewModel->maxPercent() < 100): ?>
+        <p class="text-xs text-base-content/60 mt-1">
+            <?= $escaper->escapeHtml(__('Points pay up to %1% of the products.', (float) $viewModel->maxPercent())) ?>
+        </p>
+    <?php endif; ?>
+</div>

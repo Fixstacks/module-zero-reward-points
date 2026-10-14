@@ -1,0 +1,107 @@
+<?php
+/**
+ * Copyright © 2026 Roman Pasichnyk
+ * SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+ *
+ * Customers > Reward Points: add or take points; customers with points (a
+ * search by email shows that customer's changes too).
+ *
+ * @var \Magento\Backend\Block\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+/** @var \Zero\RewardPoints\ViewModel\Admin $admin */
+$admin = $block->getData('view_model');
+$search = $admin->search();
+$balances = $admin->balances();
+$websites = $admin->websites();
+?>
+<section class="admin__fieldset-wrapper" style="margin-bottom: 30px;">
+    <h2 class="admin__legend"><?= $escaper->escapeHtml(__('Add or Take Points')) ?></h2>
+    <form method="post" action="<?= $escaper->escapeUrl($admin->url('zero_reward/points/save')) ?>" class="zero-reward-adjust"
+          style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;">
+        <input type="hidden" name="form_key" value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>">
+        <label><?= $escaper->escapeHtml(__('Customer Email')) ?><br>
+            <input class="admin__control-text" type="email" name="email" id="reward-email" required value="<?= $escaper->escapeHtmlAttr($search) ?>" style="width: 260px;">
+        </label>
+        <?php if (count($websites) > 1): ?>
+            <label><?= $escaper->escapeHtml(__('Website')) ?><br>
+                <select class="admin__control-select" name="website_id">
+                    <?php foreach ($websites as $id => $name): ?>
+                        <option value="<?= (int) $id ?>"><?= $escaper->escapeHtml($name) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+        <?php else: ?>
+            <input type="hidden" name="website_id" value="<?= (int) array_key_first($websites) ?>">
+        <?php endif; ?>
+        <label><?= $escaper->escapeHtml(__('Points (negative: take)')) ?><br>
+            <input class="admin__control-text" type="number" name="points" id="reward-points" required step="1" style="width: 140px;">
+        </label>
+        <label><?= $escaper->escapeHtml(__('Note for the Customer')) ?><br>
+            <input class="admin__control-text" type="text" name="comment" id="reward-comment" maxlength="255" style="width: 300px;">
+        </label>
+        <button type="submit" class="action-primary"><?= $escaper->escapeHtml(__('Save Points')) ?></button>
+    </form>
+</section>
+
+<form method="get" action="<?= $escaper->escapeUrl($admin->url('zero_reward/points/index')) ?>" style="margin-bottom: 15px; display: flex; gap: 8px;">
+    <input class="admin__control-text" type="search" name="email" value="<?= $escaper->escapeHtmlAttr($search) ?>"
+           placeholder="<?= $escaper->escapeHtmlAttr(__('Search by email')) ?>" aria-label="<?= $escaper->escapeHtmlAttr(__('Search by email')) ?>" style="width: 300px;">
+    <button type="submit" class="action-secondary"><?= $escaper->escapeHtml(__('Search')) ?></button>
+</form>
+
+<table class="data-grid zero-reward-balances">
+    <thead>
+        <tr>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Customer')) ?></th>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Email')) ?></th>
+            <?php if (count($websites) > 1): ?><th class="data-grid-th"><?= $escaper->escapeHtml(__('Website')) ?></th><?php endif; ?>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Points')) ?></th>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Earned in All')) ?></th>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Last Change')) ?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($balances as $row): ?>
+            <tr>
+                <td><?= $escaper->escapeHtml(trim($row['firstname'] . ' ' . $row['lastname'])) ?></td>
+                <td><a href="<?= $escaper->escapeUrl($admin->url('zero_reward/points/index', ['email' => $row['email']])) ?>"><?= $escaper->escapeHtml($row['email']) ?></a></td>
+                <?php if (count($websites) > 1): ?><td><?= $escaper->escapeHtml($websites[(int) $row['website_id']] ?? '') ?></td><?php endif; ?>
+                <td data-reward-points><?= (int) $row['points'] ?></td>
+                <td><?= (int) $row['earned'] ?></td>
+                <td><?= $escaper->escapeHtml($row['updated']) ?> UTC</td>
+            </tr>
+        <?php endforeach; ?>
+        <?php if (!$balances): ?>
+            <tr><td colspan="6"><?= $escaper->escapeHtml($search !== '' ? __('No customer with points matches.') : __('No customer has points yet.')) ?></td></tr>
+        <?php endif; ?>
+    </tbody>
+</table>
+
+<?php if ($search !== '' && count($balances) === 1 && strcasecmp($balances[0]['email'], $search) === 0): ?>
+    <h2 class="admin__legend" style="margin-top: 30px;"><?= $escaper->escapeHtml(__('Changes')) ?></h2>
+    <table class="data-grid zero-reward-history">
+        <thead>
+            <tr>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Date (UTC)')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('What')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Points')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Unspent')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Expires (UTC)')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Note')) ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($admin->history($balances[0]) as $row): ?>
+                <tr>
+                    <td><?= $escaper->escapeHtml($row['created_at']) ?></td>
+                    <td><?= $escaper->escapeHtml($row['label']) ?></td>
+                    <td><?= (int) $row['points'] ?></td>
+                    <td><?= (int) $row['points'] > 0 ? (int) $row['remaining'] : '' ?></td>
+                    <td><?= $escaper->escapeHtml((string) $row['expires_at']) ?></td>
+                    <td><?= $escaper->escapeHtml((string) $row['comment']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>

@@ -1,0 +1,44 @@
+{
+    "zero_reward_transaction": {
+        "column": {
+            "transaction_id": true,
+            "customer_id": true,
+            "website_id": true,
+            "points": true,
+            "remaining": true,
+            "action": true,
+            "order_increment_id": true,
+            "reference": true,
+            "comment": true,
+            "expires_at": true,
+            "created_at": true
+        },
+        "index": {
+            "ZERO_REWARD_TRANSACTION_CUSTOMER_ID_WEBSITE_ID": true,
+            "ZERO_REWARD_TRANSACTION_EXPIRES_AT_REMAINING": true,
+            "ZERO_REWARD_TRANSACTION_ACTION_REFERENCE": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ZERO_REWARD_TRANSACTION_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+        }
+    },
+    "quote": {
+        "column": {
+            "zero_reward_points": true,
+            "zero_reward_points_used": true,
+            "zero_reward_amount": true,
+            "base_zero_reward_amount": true
+        }
+    },
+    "sales_order": {
+        "column": {
+            "zero_reward_points_used": true,
+            "zero_reward_amount": true,
+            "base_zero_reward_amount": true,
+            "zero_reward_points_returned": true,
+            "zero_reward_points_earned": true,
+            "zero_reward_points_revoked": true
+        }
+    }
+}

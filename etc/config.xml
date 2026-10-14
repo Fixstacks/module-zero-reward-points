@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+    Copyright © 2026 Roman Pasichnyk
+    SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <zero_reward>
+            <general>
+                <enabled>1</enabled>
+                <earn_rate>1</earn_rate>
+                <point_value>0.01</point_value>
+                <signup_points>100</signup_points>
+                <review_points>50</review_points>
+                <min_points>100</min_points>
+                <max_percent>50</max_percent>
+                <expire_days>365</expire_days>
+                <show_on_product>1</show_on_product>
+            </general>
+        </zero_reward>
+    </default>
+</config>

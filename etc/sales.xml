@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+    Copyright © 2026 Roman Pasichnyk
+    SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/sales.xsd">
+    <section name="quote">
+        <group name="totals">
+            <!-- After the discount (300) and shipping (350), before tax (450): points are part of the discount. -->
+            <item name="zero_reward" instance="Zero\RewardPoints\Model\Total\Points" sort_order="400"/>
+        </group>
+    </section>
+</config>

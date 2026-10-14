@@ -1,0 +1,72 @@
+<?php
+/**
+ * Copyright © 2026 Roman Pasichnyk
+ * SPDX-License-Identifier: OSL-3.0 OR AFL-3.0
+ *
+ * My Account > Reward Points.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Zero\RewardPoints\ViewModel\Account $viewModel
+ */
+$viewModel = $block->getData('viewModel');
+$balance = $viewModel->balance();
+$expiring = $viewModel->expiring();
+$history = $viewModel->history();
+?>
+<div class="zero-reward-account flex flex-col gap-8">
+    <section class="flex flex-col gap-1" aria-labelledby="reward-balance-title">
+        <h2 id="reward-balance-title" class="text-sm uppercase tracking-wide text-base-content/70"><?= $escaper->escapeHtml(__('Your points')) ?></h2>
+        <p class="text-4xl font-semibold tabular-nums" data-reward-balance="<?= (int) $balance ?>"><?= $escaper->escapeHtml(number_format($balance)) ?></p>
+        <p class="text-base-content/70"><?= $escaper->escapeHtml(__('Worth %1 at checkout', $viewModel->worth($balance))) ?></p>
+        <?php if ($expiring['points'] > 0): ?>
+            <p class="alert alert-warning alert-soft text-sm py-2 mt-2">
+                <?= $escaper->escapeHtml(__('%1 points expire on %2.', number_format($expiring['points']), (string) $expiring['first'])) ?>
+            </p>
+        <?php endif; ?>
+    </section>
+
+    <section aria-labelledby="reward-earn-title">
+        <h2 id="reward-earn-title" class="text-lg font-semibold mb-2"><?= $escaper->escapeHtml(__('How to earn and use them')) ?></h2>
+        <ul class="list-disc ps-5 flex flex-col gap-1">
+            <?php foreach ($viewModel->howToEarn() as $way): ?>
+                <li><?= $escaper->escapeHtml($way) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </section>
+
+    <section aria-labelledby="reward-history-title">
+        <h2 id="reward-history-title" class="text-lg font-semibold mb-2"><?= $escaper->escapeHtml(__('History')) ?></h2>
+        <?php if (!$history): ?>
+            <p class="text-base-content/70"><?= $escaper->escapeHtml(__('Nothing yet.')) ?></p>
+        <?php else: ?>
+            <div class="overflow-x-auto">
+                <table class="table table-sm" data-reward-history>
+                    <thead>
+                        <tr>
+                            <th scope="col"><?= $escaper->escapeHtml(__('Date')) ?></th>
+                            <th scope="col"><?= $escaper->escapeHtml(__('What')) ?></th>
+                            <th scope="col" class="text-end"><?= $escaper->escapeHtml(__('Points')) ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($history as $row): ?>
+                            <tr>
+                                <td class="whitespace-nowrap"><?= $escaper->escapeHtml($row['date']) ?></td>
+                                <td>
+                                    <?= $escaper->escapeHtml($row['label']) ?>
+                                    <?php if ($row['comment'] !== ''): ?>
+                                        <span class="block text-xs text-base-content/60"><?= $escaper->escapeHtml($row['comment']) ?></span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="text-end tabular-nums <?= $row['points'] > 0 ? 'text-success' : '' ?>">
+                                    <?= $escaper->escapeHtml(($row['points'] > 0 ? '+' : '') . number_format($row['points'])) ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </section>
+</div>
