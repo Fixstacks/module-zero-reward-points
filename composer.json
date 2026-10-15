@@ -2,7 +2,7 @@
     "name": "fixstacks/module-zero-reward-points",
     "description": "Zero for Magento Open Source: reward points: customers earn them on paid orders and pay part of an order with them.",
     "type": "magento2-module",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -35,7 +35,7 @@
         "magento/module-sales": "*",
         "magento/module-sales-rule": "*",
         "magento/module-store": "*",
-        "fixstacks/module-zero-checkout": "^1.0"
+        "fixstacks/module-zero-checkout": "^1.1"
     },
     "autoload": {
         "files": [
