@@ -1,4 +1,4 @@
-# fixstacks/module-zero-reward-points — licensing
+# zerofront/module-zero-reward-points — licensing
 
 Copyright © 2026 Roman Pasichnyk.
 
